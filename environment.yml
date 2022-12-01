@@ -1,0 +1,11 @@
+name: aoc_2022
+channels:
+  - anaconda
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytest
+  - numpy
+  - click
+  - requests
+  - beautifulsoup4
