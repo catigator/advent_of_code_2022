@@ -13,12 +13,14 @@ from utils.helper_functions import (
 INPUT_FILENAME = "aoc/day_02/INPUT.txt"
 EXAMPLE_FILENAME = "aoc/day_02/EXAMPLE_01.txt"
 
+# Points per shape
 SHAPE = {
     "R": 1,
     "P": 2,
     "S": 3
 }
 
+# Score for winning, losing or drawing between OUTCOME[player][opponent]
 OUTCOME = {
     "R": {
         "R": 3,
@@ -37,18 +39,24 @@ OUTCOME = {
         }
 }
 
+# For a given opponent move as key, lists the moves required to (Win, Lose, Draw)
 TO_WIN_LOSE_DRAW = {
     "R": ("P", "S", "R"),
     "P": ("S", "R", "P"),
     "S": ("R", "P", "S"),
 }
 
+# Returns index to use in TO_WIN_LOSE_DRAW. (0 = Win, 1 = Lose, 2 = Draw)
+# Would likely be easier to read if the format was reordered to match the description inputs:
+# "X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win."
+# i.e. (0 = Lose, 1 = Draw, 3 = Win). But ¯\_(ツ)_/¯ too lazy to change TO_WIN_LOSE_DRAW format now.
 WLD_COMMAND = {
     "X": 1,
     "Y": 2,
     "Z": 0
 }
 
+# Converts from input to "R"ock, "P"aper, "S"cissors
 CONV = {
     "A": "R",
     "B": "P",
