@@ -30,15 +30,16 @@ def get_value(c: str):
 
 def get_duplicate(a: str, b: str):
 
+    dups = ""
     for char_a in a:
-        if char_a in b:
-            return char_a
+        if char_a in b and char_a not in dups:
+            dups += char_a
 
     for char_b in b:
-        if char_b in a:
-            return char_b
+        if char_b in char_a not in dups:
+            dups += char_b
 
-    return None
+    return dups
 
 
 def solve_lines_1(lines: List[str]):
