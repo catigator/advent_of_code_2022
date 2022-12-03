@@ -1,0 +1,6 @@
+Day 03 - Part 1
+The sum of priorities for duplicate items is 7793
+[2022-12-03 11:04:55.988181] Time taken to execute 'solve_part_1' was 0.0011432170867919922 seconds
+Day 03 - Part 2
+The sum of priorities for all groups is 2499
+[2022-12-03 11:04:55.989298] Time taken to execute 'solve_part_2' was 0.001070261001586914 seconds

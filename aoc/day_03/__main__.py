@@ -14,13 +14,6 @@ INPUT_FILENAME = "aoc/day_03/INPUT.txt"
 EXAMPLE_FILENAME = "aoc/day_03/EXAMPLE_01.txt"
 
 
-# def split_sentences(lines):
-#     temp = []
-#     for line in lines:
-#         hl = int(len(line)/2)
-#         temp.append([line[:hl], line[:hl]])
-#     return temp
-
 def get_value(c: str):
     if c.islower():
         return ord(c) - 96
@@ -42,6 +35,21 @@ def get_duplicate(a: str, b: str):
     return dups
 
 
+def get_duplicates_three(a: str, b: str, c: str):
+    ab = get_duplicate(a, b)
+    bc = get_duplicate(b, c)
+
+    abc = get_duplicate(ab, bc)
+    return abc
+
+
+def make_groups(lines: List[str]):
+    groups = []
+    for i in range(int(len(lines)/3)):
+        groups.append([lines[3*i], lines[3*i+1], lines[3*i+2]])
+    return groups
+
+
 def solve_lines_1(lines: List[str]):
     split_lines = [[line[:int(len(line)/2)], line[int(len(line)/2):]] for line in lines]
     total = 0
@@ -50,6 +58,16 @@ def solve_lines_1(lines: List[str]):
         value = get_value(dup)
         total += value
     return total
+
+
+def solve_groups(groups: List[List[str]]):
+    scores = 0
+    for group in groups:
+        dups = get_duplicates_three(group[0], group[1], group[2])
+        score = get_value(dups)
+        scores += score
+    return scores
+
 
 @time_it
 def solve_part_1():
@@ -62,8 +80,12 @@ def solve_part_1():
 @time_it
 def solve_part_2():
     print("Day 03 - Part 2")
+    lines = read_input_lines(INPUT_FILENAME, True)
+    groups = make_groups(lines)
+    total = solve_groups(groups)
+    print(f"The sum of priorities for all groups is {total}")
 
 
 if __name__ == "__main__":
     solve_part_1()
-    # solve_part_2()
+    solve_part_2()
