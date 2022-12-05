@@ -37,6 +37,12 @@ def read_input_lines(filename: str, strip_whitespace: bool=False) -> List[str]:
     return lines_list
 
 
+def read_input_lines_strip_newline(filename: str):
+    lines = read_input_lines(filename)
+    stripped_lines = [line.strip("\n") for line in lines]
+    return stripped_lines
+
+
 def read_input_int(filename: str) -> List[int]:
     """
 
@@ -145,3 +151,19 @@ def read_input_int_matrix(filename: str) -> List[List[int]]:
         matrix.append([int(number) for number in line])
 
     return matrix
+
+
+def split_list_on_entry(entries: List, signifier):
+    split_list = []
+    temp = []
+    for entry in entries:
+        if entry != signifier:
+            temp.append(entry)
+        else:
+            split_list.append(temp)
+            temp = []
+
+    if temp != []:
+        split_list.append(temp)
+
+    return split_list
