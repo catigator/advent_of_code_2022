@@ -1,0 +1,8 @@
+Day 05 - Part 1
+defaultdict(<class 'list'>, {0: ['M', 'T', 'F', 'S', 'C'], 1: ['B', 'P', 'M', 'L', 'F'], 2: ['B', 'W', 'T', 'B', 'F'], 3: ['Z', 'C', 'Q', 'P', 'T', 'H'], 4: ['T', 'S', 'J', 'G', 'T', 'G', 'G', 'H', 'S', 'B', 'W', 'Z', 'M', 'M', 'D', 'G', 'V'], 5: ['V'], 6: ['J', 'W', 'N', 'Q', 'Q', 'B', 'P', 'J', 'H'], 7: ['N', 'T', 'G', 'N'], 8: ['S', 'W', 'S', 'C']})
+The top crates are CFFHVVHNC
+[2022-12-05 20:53:53.656184] Time taken to execute 'solve_part_1' was 0.0022590160369873047 seconds
+Day 05 - Part 2
+defaultdict(<class 'list'>, {0: ['G', 'C', 'M', 'B', 'F'], 1: ['V', 'M', 'W', 'Q', 'S'], 2: ['B', 'T', 'S', 'C', 'Z'], 3: ['S', 'B', 'M', 'D', 'J', 'W'], 4: ['W', 'Q', 'F', 'W', 'N', 'G', 'F', 'G', 'N', 'T', 'G', 'H', 'T', 'J', 'P', 'Q', 'B'], 5: ['P'], 6: ['Z', 'C', 'T', 'P', 'S', 'H', 'J', 'M', 'T'], 7: ['N', 'T', 'V', 'B'], 8: ['L', 'S', 'H', 'G']})
+The top crates are FSZWBPTBG
+[2022-12-05 20:53:53.657572] Time taken to execute 'solve_part_2' was 0.0013561248779296875 seconds

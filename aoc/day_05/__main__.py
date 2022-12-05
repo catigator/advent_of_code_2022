@@ -44,48 +44,73 @@ def move_from_a_to_b(quantity: int, a: int, b: int):
     return a, b
 
 
+def move_from_a_to_b_many_at_once(quantity: int, a: int, b: int):
+
+    to_move = a[-quantity:]
+    b += to_move
+    a = a[:-quantity]
+
+    return a, b
+
+
 def parse_command(command):
     new_command = re.findall('[0-9]+', command)
     new_command = [int(num) for num in new_command]
     return new_command
 
 
-def handle_command(command, stacks):
+def handle_command(command, stacks, crate_mover=9000):
     a_i = command[1] - 1
     b_i = command[2] - 1
     quantity = command[0]
 
-    stacks[a_i], stacks[b_i] = move_from_a_to_b(quantity, stacks[a_i], stacks[b_i])
+    if crate_mover == 9000:
+        stacks[a_i], stacks[b_i] = move_from_a_to_b(quantity, stacks[a_i], stacks[b_i])
+    elif crate_mover == 9001:
+        stacks[a_i], stacks[b_i] = move_from_a_to_b_many_at_once(quantity, stacks[a_i], stacks[b_i])
 
     return stacks
 
 
-def handle_commands(commands, stacks):
+def handle_commands(commands, stacks, crate_mover=9000):
     for command in commands:
-        stacks = handle_command(command, stacks)
+        stacks = handle_command(command, stacks, crate_mover)
 
-@time_it
-def solve_part_1():
-    lines = read_input_lines_strip_newline(INPUT_FILENAME)
+
+def get_commands_and_stacks(lines):
+
     split_lines = split_list_on_entry(lines, "")
     starting_stacks = [line for line in split_lines[0] if line[1] != "1"]
     commands = split_lines[1]
     rows = get_rows(starting_stacks)
     stacks = get_stacks(rows)
     commands = [parse_command(command) for command in commands]
-    handle_commands(commands, stacks)
+    return commands, stacks
 
+
+@time_it
+def solve_part_1():
+    print("Day 05 - Part 1")
+    lines = read_input_lines_strip_newline(INPUT_FILENAME)
+    commands, stacks = get_commands_and_stacks(lines)
+    handle_commands(commands, stacks)
     top_crates = "".join([stack[-1] for key, stack in stacks.items()])
     print(stacks)
     print(f"The top crates are {top_crates}")
-    print("Day 05 - Part 1")
 
 
 @time_it
 def solve_part_2():
     print("Day 05 - Part 2")
+    lines = read_input_lines_strip_newline(INPUT_FILENAME)
+    commands, stacks = get_commands_and_stacks(lines)
+
+    handle_commands(commands, stacks, crate_mover=9001)
+    top_crates = "".join([stack[-1] for key, stack in stacks.items()])
+    print(stacks)
+    print(f"The top crates are {top_crates}")
 
 
 if __name__ == "__main__":
     solve_part_1()
-    # solve_part_2()
+    solve_part_2()
