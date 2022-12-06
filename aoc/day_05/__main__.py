@@ -17,13 +17,15 @@ EXAMPLE_FILENAME = "aoc/day_05/EXAMPLE_01.txt"
 
 
 def get_rows(lines):
-    rows = []
-    for line in lines:
-        row = []
-        for i in range(1, len(line), 4):
-            row.append(line[i])
-        rows.append(row)
+    rows = [[line[i] for i in range(1, len(line), 4)] for line in lines]
     return rows
+    # rows = []
+    # for line in lines:
+    #     row = []
+    #     for i in range(1, len(line), 4):
+    #         row.append(line[i])
+    #     rows.append(row)
+    # return rows
 
 
 def get_stacks(rows):
