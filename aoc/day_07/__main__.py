@@ -36,14 +36,17 @@ def get_size_files(files: defaultdict[int]):
     return size
 
 
-def get_size_directory(directory, small_dirs: List):
+def get_size_directory(directory, small_dirs: List, min_num=True):
     size = 0
     for sub_dir_name, sub_dir in directory.directories.items():
-        extra_size, small_dirs = get_size_directory(sub_dir, small_dirs)
+        extra_size, small_dirs = get_size_directory(sub_dir, small_dirs, min_num)
         size += extra_size
     size += get_size_files(directory.files)
     directory.size = size
-    if size < 100000:
+    if min_num:
+        if size < 100000:
+            small_dirs.append(directory)
+    else:
         small_dirs.append(directory)
     return size, small_dirs
 
@@ -139,6 +142,7 @@ def print_dir(dir: Directory):
     for filename, size in dir.files.items():
         print(file_tabs + "- " + filename + "(file, size=" + size + ")")
 
+
 @time_it
 def solve_part_1():
     print("Day 07 - Part 1")
@@ -152,12 +156,23 @@ def solve_part_1():
     a = 1
 
 
-
 @time_it
 def solve_part_2():
     print("Day 07 - Part 2")
+    lines = read_input_lines(INPUT_FILENAME, True)
+    start_dir = Directory(defaultdict(Directory), defaultdict(int), None, None, 0, "/")
+    current_dir = parse_lines(lines, start_dir)
+    small_dirs = []
+    total_size, small_dirs = get_size_directory(start_dir, small_dirs, False)
+    size_needed = 30000000 - (70000000 - total_size)
+    small_dirs.sort(key=lambda dir: dir.size)
+    for dir in small_dirs:
+        if dir.size > size_needed:
+            print(f"Need to delete {dir.name} to free up {dir.size}")
+            break
+    print(f"Size of small dirs is {sum([d.size for d in small_dirs])}")
 
 
 if __name__ == "__main__":
     solve_part_1()
-    # solve_part_2()
+    solve_part_2()

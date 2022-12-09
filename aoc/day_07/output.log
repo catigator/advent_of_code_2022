@@ -491,4 +491,8 @@ Day 07 - Part 1
  - wbs.vmh(file, size=256180)
  - zsntdzf(file, size=257693)
 Size of small dirs is 1443806
-[2022-12-09 23:29:08.798541] Time taken to execute 'solve_part_1' was 0.0015528202056884766 seconds
+[2022-12-09 23:47:07.975193] Time taken to execute 'solve_part_1' was 0.0018661022186279297 seconds
+Day 07 - Part 2
+Need to delete lfrctthp to free up 942298
+Size of small dirs is 192433201
+[2022-12-09 23:47:07.977482] Time taken to execute 'solve_part_2' was 0.0022509098052978516 seconds
