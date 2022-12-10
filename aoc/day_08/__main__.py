@@ -14,8 +14,14 @@ EXAMPLE_FILENAME = "aoc/day_08/EXAMPLE_01.txt"
 
 
 def get_row_positions(y_start, y_end, x_start, x_end):
-    y = range(y_start, y_end)
-    x = range(x_start, x_end)
+    ysign = np.sign(y_end - y_start)
+    xsign = np.sign(x_end - x_start)
+    if ysign == 0:
+        ysign = 1
+    if xsign == 0:
+        xsign = 1
+    y = range(y_start, y_end, ysign)
+    x = range(x_start, x_end, xsign)
     if x == range(0, 0):
         x = range(x_start, x_start + 1)
 
@@ -98,6 +104,19 @@ def count_visible(visible):
                 count += 1
     return count
 
+
+def get_rows_from_tree(pos, matrix):
+    ylen = len(matrix)
+    xlen = len(matrix[0])
+
+    y = pos[0]
+    x = pos[1]
+
+    rows = []
+    top = get_row_positions(y, 0, x, x)
+    right = get_row_positions(y, y, x, xlen)
+    left = get_row_positions(y, y, x, 0)
+    down = get_row_positions(y, y, x, 0)
 
 @time_it
 def solve_part_1():
