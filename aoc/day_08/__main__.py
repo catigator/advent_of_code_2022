@@ -27,25 +27,25 @@ def get_row_positions(y_start, y_end, x_start, x_end):
 
 
 def check_row(row, matrix, visible):
-    print("-----------")
-    print(f"row: {row}")
+    # print("-----------")
+    # print(f"row: {row}")
     pos = row[0]
 
     visible[pos[0]][pos[1]] = 1
     last_tree = matrix[pos[0]][pos[1]]
-    print(f"pos: {pos}, last_tree: {last_tree}")
+    # print(f"pos: {pos}, last_tree: {last_tree}")
     for i in range(1, len(row)):
         pos = row[i]
         tree = matrix[pos[0]][pos[1]]
-        print(f"pos: {pos} , tree: {tree}, last_tree: {last_tree}")
+        # print(f"pos: {pos} , tree: {tree}, last_tree: {last_tree}")
         if tree > last_tree:
             visible[pos[0]][pos[1]] = 1
-            print(f"Setting [{pos[0]}][{pos[1]}] to visible")
+            # print(f"Setting [{pos[0]}][{pos[1]}] to visible")
             last_tree = tree
         else:
-            print("breaking")
-            break
-    print_matrix(visible)
+            # this one isn't visible
+            pass
+    # print_matrix(visible)
     return visible
 
 
@@ -102,16 +102,16 @@ def count_visible(visible):
 @time_it
 def solve_part_1():
     print("Day 08 - Part 1")
-    matrix = read_input_int_matrix(EXAMPLE_FILENAME)
+    matrix = read_input_int_matrix(INPUT_FILENAME)
     len_y = len(matrix)
     len_x = len(matrix[0])
     visible = np.zeros((len_y, len_x))
-    print_matrix(matrix)
-    print("-------")
-    print_matrix(visible)
+    # print_matrix(matrix)
+    # print("-------")
+    # print_matrix(visible)
     get_visibility(matrix, visible)
     num_visible = count_visible(visible)
-    a = 1
+    print(f"There are {num_visible} visible trees")
 
 
 @time_it
