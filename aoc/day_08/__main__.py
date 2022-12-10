@@ -55,6 +55,29 @@ def check_row(row, matrix, visible):
     return visible
 
 
+def check_row_2(row, matrix, visible):
+    # print("-----------")
+    # print(f"row: {row}")
+    pos = row[0]
+    last_tree = None
+
+    num_visible = 0
+    # print(f"pos: {pos}, last_tree: {last_tree}")
+    for i in range(1, len(row)):
+        pos = row[i]
+        tree = matrix[pos[0]][pos[1]]
+        # print(f"pos: {pos} , tree: {tree}, last_tree: {last_tree}")
+        if not last_tree or tree > last_tree:
+            num_visible += 1
+            # print(f"Setting [{pos[0]}][{pos[1]}] to visible")
+            last_tree = tree
+        else:
+            # this one isn't visible
+            pass
+    # print_matrix(visible)
+    return num_visible
+
+
 def get_visibility(matrix, visible):
     """
 
@@ -100,8 +123,7 @@ def count_visible(visible):
     count = 0
     for y in range(len(visible)):
         for x in range(len(visible[y])):
-            if visible[y][x] == 1:
-                count += 1
+            count += visible[y][x]
     return count
 
 
@@ -113,10 +135,33 @@ def get_rows_from_tree(pos, matrix):
     x = pos[1]
 
     rows = []
-    top = get_row_positions(y, 0, x, x)
+    top = get_row_positions(y, -1, x, x)
     right = get_row_positions(y, y, x, xlen)
-    left = get_row_positions(y, y, x, 0)
-    down = get_row_positions(y, y, x, 0)
+    down = get_row_positions(y, ylen, x, x)
+    left = get_row_positions(y, y, x, -1)
+    rows = [top, right, down, left]
+    return rows
+
+
+def count_visible_from_tree(pos, matrix):
+    rows = get_rows_from_tree(pos, matrix)
+    visible = np.zeros((len(matrix), len(matrix[0])))
+    num_visibles = []
+    for row in rows:
+        num_visible = check_row_2(row, matrix, visible)
+        num_visibles.append(num_visible)
+    total = np.prod(num_visibles)
+    return total
+
+
+def count_all_visible(matrix):
+    score = np.zeros((len(matrix), len(matrix[0])))
+    for y in range(len(matrix)):
+        for x in range(len(matrix[0])):
+            score[y][x] = count_visible_from_tree((y,x), matrix)
+
+    return score
+
 
 @time_it
 def solve_part_1():
@@ -136,8 +181,12 @@ def solve_part_1():
 @time_it
 def solve_part_2():
     print("Day 08 - Part 2")
+    matrix = read_input_int_matrix(EXAMPLE_FILENAME)
+    matrix = np.array(matrix)
+    score = count_all_visible(matrix)
+    print(f"There are {12} visible trees")
 
 
 if __name__ == "__main__":
-    solve_part_1()
-    # solve_part_2()
+    # solve_part_1()
+    solve_part_2()
