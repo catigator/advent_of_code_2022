@@ -1,3 +1,6 @@
 Day 09 - Part 1
 The tail visits 6243 locations at least once
-[2022-12-11 12:51:37.396298] Time taken to execute 'solve_part_1' was 0.048597097396850586 seconds
+[2022-12-11 13:01:32.929229] Time taken to execute 'solve_part_1' was 0.038012027740478516 seconds
+Day 09 - Part 2
+The tail visits 2630 locations at least once
+[2022-12-11 13:01:33.160383] Time taken to execute 'solve_part_2' was 0.2310929298400879 seconds

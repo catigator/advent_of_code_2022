@@ -67,6 +67,29 @@ def process_commands(split_lines):
     return visited
 
 
+def process_commands_2(split_lines, knots=10):
+    visited = defaultdict(int)
+    positions = [(0, 0) for i in range(knots)]
+    i_head = knots - 1
+    i_tail = 0
+    visited[positions[i_tail]] += 1
+
+    for line in split_lines:
+        move, direction, mult = get_move(line)
+        for i in range(mult):
+            positions[i_head] = add_pos(positions[i_head], direction)
+            for i in range(len(positions) - 2, -1, -1):
+                back = positions[i]
+                front = positions[i+1]
+                diff = get_diff(back, front)
+                are_touching = np.abs(diff[0]) <= 1 and np.abs(diff[1]) <= 1
+                if not are_touching:
+                    back_move = get_tail_move(diff)
+                    positions[i] = add_pos(back, back_move)
+
+            visited[positions[i_tail]] += 1
+    return visited
+
 
 @time_it
 def solve_part_1():
@@ -80,8 +103,12 @@ def solve_part_1():
 @time_it
 def solve_part_2():
     print("Day 09 - Part 2")
+    lines = read_input_lines(INPUT_FILENAME)
+    split_lines = [line.split() for line in lines]
+    visited = process_commands_2(split_lines)
+    print(f"The tail visits {len(visited)} locations at least once")
 
 
 if __name__ == "__main__":
     solve_part_1()
-    # solve_part_2()
+    solve_part_2()
