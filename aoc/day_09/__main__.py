@@ -71,11 +71,10 @@ def process_commands(split_lines):
 @time_it
 def solve_part_1():
     print("Day 09 - Part 1")
-    lines = read_input_lines(EXAMPLE_FILENAME)
+    lines = read_input_lines(INPUT_FILENAME)
     split_lines = [line.split() for line in lines]
     visited = process_commands(split_lines)
     print(f"The tail visits {len(visited)} locations at least once")
-    print(visited)
 
 
 @time_it
