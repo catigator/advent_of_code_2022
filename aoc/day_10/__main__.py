@@ -16,49 +16,56 @@ def process_lines(split_lines):
     adds = []
     to_delete = []
     signal_strengths = []
-    x_vals = []
+    xvals = []
     vals = []
     x = 1
     for line in split_lines:
-        cycle += 1
         command = line[0]
-        x_vals.append(x)
-
-        if cycle % 20 == 0:
-            signal_strengths.append(cycle*x)
+        xvals.append(x)
 
         if command != "noop":
+
+            if cycle == 20 or (cycle - 20) % 40 == 0:
+                signal_strength = cycle * x
+                signal_strengths.append(signal_strength)
+
+            if cycle + 1 == 20 or (cycle + 1 - 20) % 40 == 0:
+                signal_strength = (cycle+1) * x
+                signal_strengths.append(signal_strength)
+
+            cycle += 2
+
+            if cycle == 20 or (cycle - 20) % 40 == 0:
+                signal_strength = cycle * x
+                signal_strengths.append(signal_strength)
+
             val = int(line[1])
+            x += val
 
             vals.append(val)
-            if command == "addx":
-                num = int(val)
-                adds.append((cycle+2, num))
+            # if command == "addx":
+            #     num = int(val)
+            #     adds.append((cycle+2, num))
         else:
+            cycle += 1
             vals.append(0)
-        for i, add in enumerate(adds):
-            if add[0] == cycle:
-                x += add[1]
-                to_delete.append(i)
-        for i in to_delete:
-            adds.pop(i)
-        to_delete = []
+
+            if cycle == 20 or (cycle - 20) % 40 == 0:
+                signal_strength = cycle * x
+                signal_strengths.append(signal_strength)
+
+        if cycle > 220:
+            break
+
     print(f"X is {x} after {cycle} cycles")
+    signal_sum = sum(signal_strengths)
+    print(f"The sum of these signal strengths is {signal_sum}")
 
-    to_delete = []
-
-    for just_looping_through_the_last_cycles in range(221 - len(split_lines)):
-        cycle += 1
-        x_vals.append(x)
-        if cycle % 20 == 0:
-            signal_strengths.append(cycle*x)
-        for i, add in enumerate(adds):
-            if add[0] == cycle:
-                x += add[1]
-                to_delete.append(i)
-        for i in to_delete:
-            adds.pop(i)
-        to_delete = []
+    # for just_looping_through_the_last_cycles in range(221 - len(split_lines)):
+    #     cycle += 1
+    #     xvals.append(x)
+    #     if cycle % 20 == 0:
+    #         signal_strengths.append(cycle*x)
 
     return x, cycle, signal_strengths
 
