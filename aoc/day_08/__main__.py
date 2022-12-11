@@ -55,25 +55,23 @@ def check_row(row, matrix, visible):
     return visible
 
 
-def check_row_2(row, matrix, visible):
+def check_row_2(row, matrix, start_pos):
     # print("-----------")
     # print(f"row: {row}")
-    pos = row[0]
-    last_tree = None
+    start_tree = matrix[start_pos[0]][start_pos[1]]
+    last_tree = start_tree
 
     num_visible = 0
     # print(f"pos: {pos}, last_tree: {last_tree}")
+    visibles = []
     for i in range(1, len(row)):
         pos = row[i]
         tree = matrix[pos[0]][pos[1]]
         # print(f"pos: {pos} , tree: {tree}, last_tree: {last_tree}")
-        if not last_tree or tree > last_tree:
-            num_visible += 1
-            # print(f"Setting [{pos[0]}][{pos[1]}] to visible")
-            last_tree = tree
-        else:
-            # this one isn't visible
-            pass
+        num_visible += 1
+        visibles.append((tree, pos))
+        if not tree < start_tree:
+            break
     # print_matrix(visible)
     return num_visible
 
@@ -145,10 +143,9 @@ def get_rows_from_tree(pos, matrix):
 
 def count_visible_from_tree(pos, matrix):
     rows = get_rows_from_tree(pos, matrix)
-    visible = np.zeros((len(matrix), len(matrix[0])))
     num_visibles = []
     for row in rows:
-        num_visible = check_row_2(row, matrix, visible)
+        num_visible = check_row_2(row, matrix, pos)
         num_visibles.append(num_visible)
     total = np.prod(num_visibles)
     return total
@@ -184,7 +181,8 @@ def solve_part_2():
     matrix = read_input_int_matrix(EXAMPLE_FILENAME)
     matrix = np.array(matrix)
     score = count_all_visible(matrix)
-    print(f"There are {12} visible trees")
+    max_score = np.max(score)
+    print(f"There are {max_score} visible trees")
 
 
 if __name__ == "__main__":
