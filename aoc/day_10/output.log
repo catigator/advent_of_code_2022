@@ -3,4 +3,4 @@ X is 19 after 221 cycles
 The sum of these signal strengths is 12560
 The signal strength total is 12560
 19 221
-[2022-12-11 21:14:57.319892] Time taken to execute 'solve_part_1' was 0.0002617835998535156 seconds
+[2022-12-11 21:19:05.076119] Time taken to execute 'solve_part_1' was 0.0003237724304199219 seconds
