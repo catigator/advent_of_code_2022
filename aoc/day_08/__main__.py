@@ -178,7 +178,7 @@ def solve_part_1():
 @time_it
 def solve_part_2():
     print("Day 08 - Part 2")
-    matrix = read_input_int_matrix(EXAMPLE_FILENAME)
+    matrix = read_input_int_matrix(INPUT_FILENAME)
     matrix = np.array(matrix)
     score = count_all_visible(matrix)
     max_score = np.max(score)
@@ -186,5 +186,5 @@ def solve_part_2():
 
 
 if __name__ == "__main__":
-    # solve_part_1()
+    solve_part_1()
     solve_part_2()
