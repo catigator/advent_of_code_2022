@@ -25,10 +25,6 @@ def process_lines(split_lines):
 
         if command != "noop":
 
-            if cycle == 20 or (cycle - 20) % 40 == 0:
-                signal_strength = cycle * x
-                signal_strengths.append(signal_strength)
-
             if cycle + 1 == 20 or (cycle + 1 - 20) % 40 == 0:
                 signal_strength = (cycle+1) * x
                 signal_strengths.append(signal_strength)
@@ -55,6 +51,9 @@ def process_lines(split_lines):
                 signal_strengths.append(signal_strength)
 
         if cycle > 220:
+            if cycle == 20 or (cycle - 20) % 40 == 0:
+                signal_strength = cycle * x
+                signal_strengths.append(signal_strength)
             break
 
     print(f"X is {x} after {cycle} cycles")
@@ -73,7 +72,7 @@ def process_lines(split_lines):
 @time_it
 def solve_part_1():
     print("Day 10 - Part 1")
-    lines = read_input_lines(EXAMPLE_FILENAME)
+    lines = read_input_lines(INPUT_FILENAME)
     split_lines = [line.split() for line in lines]
     x, cycle, signal_strengths = process_lines(split_lines)
     print(f"The signal strength total is {sum(signal_strengths)}")
