@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from utils.decorators import time_it
 from utils.helper_functions import (
@@ -25,6 +25,7 @@ class Monkey:
     test: int
     true: int
     false: int
+    inspect_count: Optional[int]
 
 
 def test_item(monkey, item_index):
@@ -33,9 +34,11 @@ def test_item(monkey, item_index):
     else:
         return False
 
+
 def get_bored(monkey, item_index):
     monkey.items[item_index] = np.floor(monkey.items[item_index] / 3.0)
     return monkey
+
 
 def get_monkey_to_throw_to(monkey, item_index) -> int:
     if test_item(monkey, item_index):
@@ -49,6 +52,9 @@ def add_item(monkeys: List[Monkey], monkey_num: int, item):
 
 
 def inspect_item(monkey, item_index):
+
+    monkey.inspect_count += 1
+
     if monkey.operator == "+":
         if monkey.actor == "old":
             monkey.items[item_index] += monkey.items[item_index]
@@ -97,6 +103,7 @@ def read_monkeys(lines):
             test=test,
             true=true,
             false=false,
+            inspect_count=0
         )
         monkeys.append(new_monkey)
     return monkeys
@@ -106,8 +113,13 @@ def process_lines(lines):
 
     monkeys = read_monkeys(lines)
     monkeys = process_monkeys(monkeys)
+    inspect_counts = [monkey.inspect_count for monkey in monkeys]
+    inspect_counts.sort()
+    monkey_business = inspect_counts[-1] * inspect_counts[-2]
 
-    return None
+    print(f"The level of monkey busines is {monkey_business}")
+
+    return monkey_business
 
 
 @time_it
