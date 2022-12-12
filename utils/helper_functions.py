@@ -89,6 +89,43 @@ def read_input_int_individuals(filename: str) -> list:
     return numbers
 
 
+def read_input_split_on_empty_line(filename: str) -> list:
+    """
+    Reads a file and returns all numbers in file as separated by commas
+
+    Example input:
+
+    a
+    a
+
+    b
+    b
+    b
+
+    Example output:
+
+    [
+        [a
+        a],
+
+        [b
+        b
+        b]
+    ]
+    """
+    lines = read_input_lines(filename, True)
+    split_lines = []
+    temp = []
+    for line in lines:
+        if line != "":
+            temp.append(line)
+        else:
+            split_lines.append(temp)
+            temp = []
+    if temp != []:
+        split_lines.append(temp)
+    return split_lines
+
 def read_input_int_split_on_empty_line(filename: str) -> list:
     """
     Reads a file and returns all numbers in file as separated by commas
