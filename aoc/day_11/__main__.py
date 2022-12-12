@@ -125,9 +125,9 @@ def process_lines(lines):
 @time_it
 def solve_part_1():
     print("Day 11 - Part 1")
-    lines = read_input_split_on_empty_line(EXAMPLE_FILENAME)
+    lines = read_input_split_on_empty_line(INPUT_FILENAME)
     results = process_lines(lines)
-    print(lines)
+
 
 @time_it
 def solve_part_2():
