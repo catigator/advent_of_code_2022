@@ -26,6 +26,7 @@ class Monkey:
     true: int
     false: int
     inspect_count: Optional[int]
+    high: bool
 
 
 def test_item(monkey, item_index):
@@ -41,6 +42,13 @@ def get_bored(monkey, item_index):
 
 
 def get_monkey_to_throw_to(monkey, item_index) -> int:
+    if test_item(monkey, item_index):
+        return monkey.true
+    else:
+        return monkey.false
+
+
+def get_monkey_to_throw_to_2(monkey, item_index) -> int:
     if test_item(monkey, item_index):
         return monkey.true
     else:
@@ -65,16 +73,19 @@ def inspect_item(monkey, item_index):
             monkey.items[item_index] *= monkey.items[item_index]
         else:
             monkey.items[item_index] *= int(monkey.actor)
+
     return monkey
 
 
-def process_monkeys(monkeys: List[Monkey]):
-    rounds = 20
+def process_monkeys(monkeys: List[Monkey], rounds=20, getting_bored=True):
     for n in range(rounds):
+        if n % 100:
+            print(f"Round {n}")
         for monkey in monkeys:
             for item_index in range(len(monkey.items)):
                 monkey = inspect_item(monkey, item_index)
-                monkey = get_bored(monkey, item_index)
+                if getting_bored:
+                    monkey = get_bored(monkey, item_index)
                 which_monkey = get_monkey_to_throw_to(monkey, item_index)
                 add_item(monkeys, which_monkey, monkey.items[item_index])
                 a = 1
@@ -103,7 +114,8 @@ def read_monkeys(lines):
             test=test,
             true=true,
             false=false,
-            inspect_count=0
+            inspect_count=0,
+            high=False
         )
         monkeys.append(new_monkey)
     return monkeys
@@ -113,6 +125,16 @@ def process_lines(lines):
 
     monkeys = read_monkeys(lines)
     monkeys = process_monkeys(monkeys)
+    inspect_counts = [monkey.inspect_count for monkey in monkeys]
+    inspect_counts.sort()
+    monkey_business = inspect_counts[-1] * inspect_counts[-2]
+
+    print(f"The level of monkey busines is {monkey_business}")
+
+
+def process_lines_2(lines):
+    monkeys = read_monkeys(lines)
+    monkeys = process_monkeys(monkeys, rounds=20, getting_bored=False)
     inspect_counts = [monkey.inspect_count for monkey in monkeys]
     inspect_counts.sort()
     monkey_business = inspect_counts[-1] * inspect_counts[-2]
@@ -131,9 +153,11 @@ def solve_part_1():
 
 @time_it
 def solve_part_2():
+    lines = read_input_split_on_empty_line(EXAMPLE_FILENAME)
+    results = process_lines_2(lines)
     print("Day 11 - Part 2")
 
 
 if __name__ == "__main__":
-    solve_part_1()
-    # solve_part_2()
+    # solve_part_1()
+    solve_part_2()
