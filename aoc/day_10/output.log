@@ -3,4 +3,19 @@ X is 19 after 221 cycles
 The sum of these signal strengths is 12560
 The signal strength total is 12560
 19 221
-[2022-12-11 21:19:05.076119] Time taken to execute 'solve_part_1' was 0.0003237724304199219 seconds
+[2022-12-12 09:26:24.042507] Time taken to execute 'solve_part_1' was 0.0002899169921875 seconds
+Day 10 - Part 2
+Day 10 - Part 1
+
+###..#....###...##..####.###...##..#....
+#..#.#....#..#.#..#.#....#..#.#..#.#....
+#..#.#....#..#.#..#.###..###..#....#....
+###..#....###..####.#....#..#.#....#....
+#....#....#....#..#.#....#..#.#..#.#....
+#....####.#....#..#.#....###...##..####.
+
+X is 37 after 240 cycles
+The sum of these signal strengths is 12560
+The signal strength total is 12560
+37 240
+[2022-12-12 09:26:24.042799] Time taken to execute 'solve_part_2' was 0.00025010108947753906 seconds
