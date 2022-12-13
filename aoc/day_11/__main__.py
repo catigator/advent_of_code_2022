@@ -104,16 +104,6 @@ def inspect_item_2(monkey, item_index, monkeys):
     return monkey
 
 
-def divide_test_before_sending(monkey, item_index, monkeys):
-    item = monkey.items[item_index]
-    rests = [item % monkey.test for monkey in monkeys]
-    # e.g. [6, 0, 6, 5] for 1501 and tests [23, 19, 13, 17]
-
-    lowest_num = 1
-
-    return None
-
-
 def process_monkeys(monkeys: List[Monkey], rounds=20, getting_bored=True):
 
     test_mult = np.sum([monkey.test for monkey in monkeys])
