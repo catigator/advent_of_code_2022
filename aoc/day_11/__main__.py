@@ -43,13 +43,14 @@ def get_bored(monkey, item_index):
 
 def get_monkey_to_throw_to(monkey, item_index) -> int:
     if test_item(monkey, item_index):
+        monkey.items[item_index] = monkey.items[item_index]
         return monkey.true
     else:
         return monkey.false
 
 
 def get_monkey_to_throw_to_2(monkey, item_index) -> int:
-    if test_item(monkey, item_index):
+    if monkey.items[item_index][monkey.monkey] == 0:
         return monkey.true
     else:
         return monkey.false
@@ -77,9 +78,48 @@ def inspect_item(monkey, item_index):
     return monkey
 
 
+def inspect_item_2(monkey, item_index, monkeys):
+
+    monkey.inspect_count += 1
+
+    if monkey.operator == "+":
+        if monkey.actor == "old":
+            for i_rest, rest in enumerate(monkey.items[item_index]):
+                monkey.items[item_index][i_rest] += monkey.items[item_index][i_rest]
+                monkey.items[item_index][i_rest] = monkey.items[item_index][i_rest] % monkeys[i_rest].test
+        else:
+            for i_rest, rest in enumerate(monkey.items[item_index]):
+                monkey.items[item_index][i_rest] += int(monkey.actor)
+                monkey.items[item_index][i_rest] = monkey.items[item_index][i_rest] % monkeys[i_rest].test
+    elif monkey.operator == "*":
+        if monkey.actor == "old":
+            for i_rest, rest in enumerate(monkey.items[item_index]):
+                monkey.items[item_index][i_rest] *= monkey.items[item_index][i_rest]
+                monkey.items[item_index][i_rest] = monkey.items[item_index][i_rest] % monkeys[i_rest].test
+        else:
+            for i_rest, rest in enumerate(monkey.items[item_index]):
+                monkey.items[item_index][i_rest] *= int(monkey.actor)
+                monkey.items[item_index][i_rest] = monkey.items[item_index][i_rest] % monkeys[i_rest].test
+
+    return monkey
+
+
+def divide_test_before_sending(monkey, item_index, monkeys):
+    item = monkey.items[item_index]
+    rests = [item % monkey.test for monkey in monkeys]
+    # e.g. [6, 0, 6, 5] for 1501 and tests [23, 19, 13, 17]
+
+    lowest_num = 1
+
+    return None
+
+
 def process_monkeys(monkeys: List[Monkey], rounds=20, getting_bored=True):
+
+    test_mult = np.sum([monkey.test for monkey in monkeys])
+
     for n in range(rounds):
-        if n % 100:
+        if n % 100 == 0:
             print(f"Round {n}")
         for monkey in monkeys:
             for item_index in range(len(monkey.items)):
@@ -88,7 +128,28 @@ def process_monkeys(monkeys: List[Monkey], rounds=20, getting_bored=True):
                     monkey = get_bored(monkey, item_index)
                 which_monkey = get_monkey_to_throw_to(monkey, item_index)
                 add_item(monkeys, which_monkey, monkey.items[item_index])
-                a = 1
+            monkey.items = []
+
+    return monkeys
+
+def process_monkeys_2(monkeys: List[Monkey], rounds=20, getting_bored=True):
+
+    test_mult = np.sum([monkey.test for monkey in monkeys])
+
+    for monkey in monkeys:
+        for item_index in range(len(monkey.items)):
+            item = monkey.items[item_index]
+            rests = [item % monkey.test for monkey in monkeys]
+            monkey.items[item_index] = rests
+
+    for n in range(rounds):
+        if n % 100:
+            print(f"Round {n}")
+        for monkey in monkeys:
+            for item_index in range(len(monkey.items)):
+                monkey = inspect_item_2(monkey, item_index, monkeys)
+                which_monkey = get_monkey_to_throw_to_2(monkey, item_index)
+                add_item(monkeys, which_monkey, monkey.items[item_index])
             monkey.items = []
 
     return monkeys
@@ -134,7 +195,7 @@ def process_lines(lines):
 
 def process_lines_2(lines):
     monkeys = read_monkeys(lines)
-    monkeys = process_monkeys(monkeys, rounds=20, getting_bored=False)
+    monkeys = process_monkeys_2(monkeys, rounds=10000, getting_bored=False)
     inspect_counts = [monkey.inspect_count for monkey in monkeys]
     inspect_counts.sort()
     monkey_business = inspect_counts[-1] * inspect_counts[-2]
