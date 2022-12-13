@@ -144,7 +144,8 @@ def process_monkeys_2(monkeys: List[Monkey], rounds=20, getting_bored=True):
 
     for n in range(rounds):
         if n % 100:
-            print(f"Round {n}")
+            # print(f"Round {n}")
+            pass
         for monkey in monkeys:
             for item_index in range(len(monkey.items)):
                 monkey = inspect_item_2(monkey, item_index, monkeys)
@@ -214,11 +215,11 @@ def solve_part_1():
 
 @time_it
 def solve_part_2():
-    lines = read_input_split_on_empty_line(EXAMPLE_FILENAME)
+    lines = read_input_split_on_empty_line(INPUT_FILENAME)
     results = process_lines_2(lines)
     print("Day 11 - Part 2")
 
 
 if __name__ == "__main__":
-    # solve_part_1()
+    solve_part_1()
     solve_part_2()

@@ -1,3 +1,7 @@
 Day 11 - Part 1
+Round 0
 The level of monkey busines is 61005
-[2022-12-12 22:42:46.611947] Time taken to execute 'solve_part_1' was 0.002416849136352539 seconds
+[2022-12-13 00:15:32.107268] Time taken to execute 'solve_part_1' was 0.002789020538330078 seconds
+The level of monkey busines is 20567144694
+Day 11 - Part 2
+[2022-12-13 00:15:33.928438] Time taken to execute 'solve_part_2' was 1.821138858795166 seconds
