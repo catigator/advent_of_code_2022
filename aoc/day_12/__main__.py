@@ -60,8 +60,12 @@ def get_start_pos(matrix) -> Optional[Tuple]:
 
 
 def get_value(c: str):
+    if c == "S":
+        return 1
+    elif c == "E":
+        return 26
     if c.islower():
-        return ord(c) - 96  # a = 1
+        return ord(c) - 96  # a = 1, z = 26
     else:
         return ord(c) - 38  # A = 27
 
@@ -80,6 +84,24 @@ def solve_part_1():
     start = get_start_pos(lines)
     possible_moves = calculate_possible_moves(lines)
     print(lines)
+
+
+def best_path(possible_moves, matrix, pos, goal, visited=None):
+
+    # 1. Starting from S
+    # 2. Go through each possible move in a new recursion. Return the minimum value of all of those
+    # 3. Stop each recursion if:
+        # a) hitting a position you've already seen
+        # b) finding the exit
+    # 4. Return total cost ( Each step costs 1 )
+
+    for move in possible_moves[pos[0]][pos[1]]:
+        if
+        costs =
+
+
+    return min(best_path(possible_moves, matrix, pos))
+
 
 
 @time_it
