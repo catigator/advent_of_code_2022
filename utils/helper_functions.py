@@ -204,3 +204,7 @@ def split_list_on_entry(entries: List, signifier):
         split_list.append(temp)
 
     return split_list
+
+
+def add_pos(a, b):
+    return a[0] + b[0], a[1] + b[1]
