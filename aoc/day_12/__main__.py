@@ -10,6 +10,7 @@ from utils.helper_functions import (
     read_input_int_matrix, add_pos, print_matrix
 )
 import numpy as np
+import sys
 
 INPUT_FILENAME = "aoc/day_12/INPUT.txt"
 EXAMPLE_FILENAME = "aoc/day_12/EXAMPLE_01.txt"
@@ -28,6 +29,8 @@ REVERSE_MOVES = {
     "down": "up",
     "left": "right",
 }
+
+sys.setrecursionlimit(10000)
 
 
 def in_range(pos, matrix):
@@ -74,15 +77,15 @@ def get_pos_for_char(matrix, char) -> Optional[Tuple]:
     return None
 
 
-def get_value(c: str):
-    if c == "S":
+def get_value(char: str):
+    if char == "S":
         return 1
-    elif c == "E":
+    elif char == "E":
         return 26
-    if c.islower():
-        return ord(c) - 96  # a = 1, z = 26
+    if char.islower():
+        return ord(char) - 96  # a = 1, z = 26
     else:
-        return ord(c) - 38  # A = 27
+        return ord(char) - 38  # A = 27
 
 
 def is_possible_move(a, b, matrix):
@@ -91,16 +94,17 @@ def is_possible_move(a, b, matrix):
     return value_b <= value_a + 1
 
 
-def get_min_path_from_list(possible_paths: Tuple[List, int]):
+def get_min_cost_from_list(possible_paths: List[int]):
     """
     possible_paths = [ [path: Lost, cost] ]
     """
-    return min(possible_paths, key=lambda path_cost_tuple: path_cost_tuple[1])
+    min_cost = min(possible_paths)
+    return min_cost
 
 
-def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0, lowest_costs=None):
+def get_best_path(possible_moves, matrix, pos, goal, cost=0, lowest_costs=None):
     """
-
+    returns best_path, cost, lowest_costs
     """
 
     # 1. Starting from S
@@ -109,32 +113,39 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0, 
     #       a) hitting a position you've already seen
     #       b) finding the exit
     # 4. Return total cost ( Each step costs 1 )
-    if current_path is None:
-        current_path = []
+
     if lowest_costs is None:
         lowest_costs = np.zeros((len(matrix), len(matrix[0])))
 
-    possible_paths = []
+    possible_costs = []
     for move_str in possible_moves[pos[0]][pos[1]]:
         new_cost = cost
         move = MOVES[move_str]
         new_pos = add_pos(pos, move)
-        if is_possible_move(pos, new_pos, matrix) and new_pos not in current_path:
+
+        prev_lowest_cost = lowest_costs[new_pos[0]][new_pos[1]]
+        if prev_lowest_cost == 0 or new_cost < prev_lowest_cost:
+            lowest_costs[new_pos[0]][new_pos[1]] = new_cost
+        else:
+            # Some other path got here quicker, ignore this way
+            continue
+
+        if is_possible_move(pos, new_pos, matrix):  # and new_pos not in current_path:
             new_cost += 1
-            new_path = copy.deepcopy(current_path)
-            new_path.append(new_pos)
+            # new_path = copy.deepcopy(current_path)
+            # new_path.append(new_pos)
 
             if matrix[new_pos[0]][new_pos[1]] == "E":
-                possible_paths.append([new_path, new_cost])
+                possible_costs.append([new_cost])
             else:
-                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, new_cost, lowest_costs)
-                if new_best_path is not None:
-                    possible_paths.append(new_best_path)
-    if possible_paths != []:
-        min_path_cost_tuple = get_min_path_from_list(possible_paths)
-        return min_path_cost_tuple
+                new_best_cost, lowest_costs = get_best_path(possible_moves, matrix, new_pos, goal, new_cost, lowest_costs)
+                if new_best_cost is not None:
+                    possible_costs.append((new_best_cost))
+    if possible_costs != []:
+        min_cost = get_min_cost_from_list(possible_costs)
+        return min_cost, lowest_costs
     else:
-        return None
+        return None, lowest_costs
 
 
 def print_moves(best_path, matrix):
@@ -151,15 +162,13 @@ def print_moves(best_path, matrix):
 def solve_part_1():
 
     print("Day 12 - Part 1")
-    lines = read_input_lines(EXAMPLE_FILENAME, True)
+    lines = read_input_lines(INPUT_FILENAME, True)
     start_pos = get_start_pos(lines)
     end_pos = get_end_pos(lines)
     possible_moves = calculate_possible_moves(lines)
-    best_path, cost = get_best_path(possible_moves, lines, start_pos, end_pos)
-    path_matrix = print_moves(best_path, lines)
+    cost, lowest_costs = get_best_path(possible_moves, lines, start_pos, end_pos)
+    # path_matrix = print_moves(best_path, lines)
     print(f"The lowest cost was {cost}")
-    print(lines)
-
 
 
 @time_it
