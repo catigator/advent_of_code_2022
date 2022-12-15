@@ -1,4 +1,5 @@
-from typing import Optional, Tuple
+import copy
+from typing import Optional, Tuple, List
 
 from utils.decorators import time_it
 from utils.helper_functions import (
@@ -19,6 +20,13 @@ MOVES = {
     "right": (1, 0),
     "down": (0, 1),
     "left": (-1, 0),
+}
+
+REVERSE_MOVES = {
+    "up": "down",
+    "right": "left",
+    "down": "up",
+    "left": "right",
 }
 
 
@@ -52,10 +60,17 @@ def calculate_possible_moves(matrix):
 
 
 def get_start_pos(matrix) -> Optional[Tuple]:
+    return get_pos_for_char(matrix, "S")
+
+
+def get_end_pos(matrix) -> Optional[Tuple]:
+    return get_pos_for_char(matrix, "E")
+
+def get_pos_for_char(matrix, char) -> Optional[Tuple]:
     for y in range(len(matrix)):
         for x in range(len(matrix[y])):
-            if matrix[y][x] == "S":
-                return (y,x)
+            if matrix[y][x] == char:
+                return (y, x)
     return None
 
 
@@ -76,31 +91,60 @@ def is_possible_move(a, b, matrix):
     return np.abs(value_a - value_b) <= 1
 
 
+def get_min_path_from_list(possible_paths: Tuple[List, int]):
+    """
+    possible_paths = [ [path: Lost, cost] ]
+    """
+    return min(possible_paths, key=lambda path_cost_tuple: path_cost_tuple[1])
+
+
+def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
+    """
+
+    """
+
+    # 1. Starting from S
+    # 2. Go through each possible move in a new recursion. Return the minimum value of all of those
+    # 3. Stop each recursion if:
+    #       a) hitting a position you've already seen
+    #       b) finding the exit
+    # 4. Return total cost ( Each step costs 1 )
+    if current_path is None:
+        current_path = []
+
+    possible_paths = []
+    for move_str in possible_moves[pos[0]][pos[1]]:
+        move = MOVES[move_str]
+        new_pos = add_pos(pos, move)
+        if is_possible_move(pos, new_pos, matrix) and new_pos not in current_path:
+            cost += 1
+            new_path = copy.deepcopy(current_path)
+            new_path.append(new_pos)
+
+            if matrix[new_pos[0]][new_pos[1]] == "E":
+                possible_paths.append([new_path, cost])
+            else:
+                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, cost)
+                if new_best_path is not None:
+                    possible_paths.append(new_best_path)
+    if possible_paths != []:
+        min_path_cost_tuple = get_min_path_from_list(possible_paths)
+        return min_path_cost_tuple
+    else:
+        return None
+
+
 @time_it
 def solve_part_1():
 
     print("Day 12 - Part 1")
     lines = read_input_lines(EXAMPLE_FILENAME, True)
-    start = get_start_pos(lines)
+    start_pos = get_start_pos(lines)
+    end_pos = get_end_pos(lines)
     possible_moves = calculate_possible_moves(lines)
+    best_path, cost = get_best_path(possible_moves, lines, start_pos, end_pos)
+    print(f"The lowest cost was {cost}")
     print(lines)
-
-
-def best_path(possible_moves, matrix, pos, goal, visited=None):
-
-    # 1. Starting from S
-    # 2. Go through each possible move in a new recursion. Return the minimum value of all of those
-    # 3. Stop each recursion if:
-        # a) hitting a position you've already seen
-        # b) finding the exit
-    # 4. Return total cost ( Each step costs 1 )
-
-    for move in possible_moves[pos[0]][pos[1]]:
-        if
-        costs =
-
-
-    return min(best_path(possible_moves, matrix, pos))
 
 
 
