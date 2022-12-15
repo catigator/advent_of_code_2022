@@ -208,3 +208,8 @@ def split_list_on_entry(entries: List, signifier):
 
 def add_pos(a, b):
     return a[0] + b[0], a[1] + b[1]
+
+
+def print_matrix(matrix):
+    for line in matrix:
+        print(line)

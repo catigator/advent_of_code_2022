@@ -7,7 +7,7 @@ from utils.helper_functions import (
     read_input_lines,
     read_input_int,
     read_input_int_individuals,
-    read_input_int_matrix, add_pos
+    read_input_int_matrix, add_pos, print_matrix
 )
 import numpy as np
 
@@ -114,17 +114,18 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
 
     possible_paths = []
     for move_str in possible_moves[pos[0]][pos[1]]:
+        new_cost = cost
         move = MOVES[move_str]
         new_pos = add_pos(pos, move)
         if is_possible_move(pos, new_pos, matrix) and new_pos not in current_path:
-            cost += 1
+            new_cost += 1
             new_path = copy.deepcopy(current_path)
             new_path.append(new_pos)
 
             if matrix[new_pos[0]][new_pos[1]] == "E":
                 possible_paths.append([new_path, cost])
             else:
-                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, cost)
+                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, new_cost)
                 if new_best_path is not None:
                     possible_paths.append(new_best_path)
     if possible_paths != []:
@@ -132,6 +133,16 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
         return min_path_cost_tuple
     else:
         return None
+
+
+def print_moves(best_path, matrix):
+    path_matrix = np.zeros((len(matrix), len(matrix[0])))
+    for i, pos in enumerate(best_path):
+        path_matrix[pos[0]][pos[1]] = i
+    print(path_matrix)
+    print("---------")
+    print_matrix(matrix)
+    return path_matrix
 
 
 @time_it
@@ -143,6 +154,7 @@ def solve_part_1():
     end_pos = get_end_pos(lines)
     possible_moves = calculate_possible_moves(lines)
     best_path, cost = get_best_path(possible_moves, lines, start_pos, end_pos)
+    print_moves(best_path, lines)
     print(f"The lowest cost was {cost}")
     print(lines)
 
