@@ -88,7 +88,7 @@ def get_value(c: str):
 def is_possible_move(a, b, matrix):
     value_a = get_value(matrix[a[0]][a[1]])
     value_b = get_value(matrix[b[0]][b[1]])
-    return np.abs(value_a - value_b) <= 1
+    return value_b <= value_a + 1
 
 
 def get_min_path_from_list(possible_paths: Tuple[List, int]):
@@ -98,7 +98,7 @@ def get_min_path_from_list(possible_paths: Tuple[List, int]):
     return min(possible_paths, key=lambda path_cost_tuple: path_cost_tuple[1])
 
 
-def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
+def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0, lowest_costs=None):
     """
 
     """
@@ -111,6 +111,8 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
     # 4. Return total cost ( Each step costs 1 )
     if current_path is None:
         current_path = []
+    if lowest_costs is None:
+        lowest_costs = np.zeros((len(matrix), len(matrix[0])))
 
     possible_paths = []
     for move_str in possible_moves[pos[0]][pos[1]]:
@@ -123,9 +125,9 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
             new_path.append(new_pos)
 
             if matrix[new_pos[0]][new_pos[1]] == "E":
-                possible_paths.append([new_path, cost])
+                possible_paths.append([new_path, new_cost])
             else:
-                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, new_cost)
+                new_best_path = get_best_path(possible_moves, matrix, new_pos, goal, new_path, new_cost, lowest_costs)
                 if new_best_path is not None:
                     possible_paths.append(new_best_path)
     if possible_paths != []:
@@ -138,7 +140,7 @@ def get_best_path(possible_moves, matrix, pos, goal, current_path=None, cost=0):
 def print_moves(best_path, matrix):
     path_matrix = np.zeros((len(matrix), len(matrix[0])))
     for i, pos in enumerate(best_path):
-        path_matrix[pos[0]][pos[1]] = i
+        path_matrix[pos[0]][pos[1]] = i + 1
     print(path_matrix)
     print("---------")
     print_matrix(matrix)
@@ -154,7 +156,7 @@ def solve_part_1():
     end_pos = get_end_pos(lines)
     possible_moves = calculate_possible_moves(lines)
     best_path, cost = get_best_path(possible_moves, lines, start_pos, end_pos)
-    print_moves(best_path, lines)
+    path_matrix = print_moves(best_path, lines)
     print(f"The lowest cost was {cost}")
     print(lines)
 
