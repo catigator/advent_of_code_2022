@@ -1,3 +1,6 @@
 Day 12 - Part 1
 The lowest cost was [425]
-[2022-12-19 12:16:59.081301] Time taken to execute 'solve_part_1' was 4.058496952056885 seconds
+[2022-12-19 12:38:25.688835] Time taken to execute 'solve_part_1' was 3.3582258224487305 seconds
+Day 12 - Part 2
+The lowest cost was 418
+[2022-12-19 12:38:44.733022] Time taken to execute 'solve_part_2' was 19.044148921966553 seconds

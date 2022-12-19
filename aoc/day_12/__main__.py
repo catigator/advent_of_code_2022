@@ -159,16 +159,16 @@ def get_best_path(possible_moves, matrix, pos, goal, cost=0, lowest_costs=None):
         return None, lowest_costs
 
 
-def get_best_path_2(possible_moves, matrix, pos, goal, cost=0, lowest_costs=None):
+def get_best_path_2(possible_moves, matrix, pos, goals, cost=0, lowest_costs=None):
     """
     returns best_path, cost, lowest_costs
     """
 
-    # 1. Starting from S
+    # 1. Starting from End
     # 2. Go through each possible move in a new recursion. Return the minimum value of all of those
     # 3. Stop each recursion if:
     #       a) hitting a position you've already seen
-    #       b) finding the exit
+    #       b) finding any of the exits
     # 4. Return total cost ( Each step costs 1 )
 
     if lowest_costs is None:
@@ -184,7 +184,6 @@ def get_best_path_2(possible_moves, matrix, pos, goal, cost=0, lowest_costs=None
         if prev_lowest_cost == 0 or new_cost < prev_lowest_cost:
             lowest_costs[new_pos[0]][new_pos[1]] = new_cost
         else:
-            # Some other path got here quicker, ignore this way
             continue
 
         if is_possible_move_2(pos, new_pos, matrix):  # and new_pos not in current_path:
@@ -192,10 +191,10 @@ def get_best_path_2(possible_moves, matrix, pos, goal, cost=0, lowest_costs=None
             # new_path = copy.deepcopy(current_path)
             # new_path.append(new_pos)
 
-            if new_pos == goal:
-                possible_costs.append([new_cost])
+            if new_pos in goals:
+                possible_costs.append(new_cost)
             else:
-                new_best_cost, lowest_costs = get_best_path_2(possible_moves, matrix, new_pos, goal, new_cost, lowest_costs)
+                new_best_cost, lowest_costs = get_best_path_2(possible_moves, matrix, new_pos, goals, new_cost, lowest_costs)
                 if new_best_cost is not None:
                     possible_costs.append(new_best_cost)
     if possible_costs != []:
@@ -239,18 +238,12 @@ def solve_part_2():
     possible_moves = calculate_possible_moves(lines, 2)
     costs = []
     lowest_costs = None
-    for start_pos in start_positions:
-        cost, lowest_costs = get_best_path_2(possible_moves, lines, end_pos, start_pos)
-        if cost is not None:
-            print(f"Cost {cost[0]} for starting in pos {start_pos}")
-            costs.append(cost[0])
-        else:
-            print(f"No path for starting in pos {start_pos}")
-    print(f"The lowest cost was {min(costs)}")
-
-
+    cost = 0
+    goals = start_positions
+    cost, lowest_costs = get_best_path_2(possible_moves, lines, end_pos, goals, cost=0, lowest_costs=lowest_costs)
+    print(f"The lowest cost was {cost}")
 
 
 if __name__ == "__main__":
     solve_part_1()
-    # solve_part_2()
+    solve_part_2()
